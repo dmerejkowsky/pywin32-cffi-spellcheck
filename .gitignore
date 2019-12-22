@@ -3,5 +3,6 @@ __pycache__
 build/
 *.pyd
 *.egg-info/
+.eggs/
 
 .tox/

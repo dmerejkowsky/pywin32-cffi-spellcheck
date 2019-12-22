@@ -1,12 +1,22 @@
 from cffi import FFI
 
 ffibuilder = FFI()
-from path import Path
 
-ffibuilder.cdef(Path("cffi_defs.h").text())
+
+def read_defs():
+    with open("cffi_defs.h", "r") as f:
+        return f.read()
+
+
+def read_sources():
+    with open("cffi_src.cpp", "r") as f:
+        return f.read()
+
+
+ffibuilder.cdef(read_defs())
 ffibuilder.set_source(
     "_spellcheck",
-    Path("cffi_src.cpp").text(),
+    read_sources(),
     source_extension=".cpp",
     libraries=["ole32"],
     language="c++",

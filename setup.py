@@ -22,7 +22,7 @@ setup(
         "cffi>=1.12",
     ],
     cffi_modules=["build_spellcheck.py:ffibuilder"],
-    install_requires=["cffi>=1.12", "typing-extensions"],
+    install_requires=["cffi>=1.12"],
     classifiers=[
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
