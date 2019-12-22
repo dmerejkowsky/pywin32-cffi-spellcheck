@@ -1,4 +1,4 @@
-from winspellcheck import SpellChecker
+from winspellcheck import SpellChecker, Error
 
 
 def test_supports_en_us():
