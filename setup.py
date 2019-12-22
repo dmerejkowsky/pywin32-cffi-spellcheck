@@ -14,6 +14,7 @@ setup(
     name="pywin32-cffi-spellcheck",
     version="0.1",
     description="cffi bindings for Spellcheck.h on Windows",
+    long_description = get_long_description(),
     url="https://github.com/pyenchant/pywin32-cffi-spellcheck",
     author="Dimitri Merejkowsky",
     packages=find_packages(),
