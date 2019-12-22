@@ -12,7 +12,7 @@ def get_long_description() -> str:
 
 setup(
     name="pywin32-cffi-spellcheck",
-    version="0.0.3",
+    version="0.0.4",
     description="cffi bindings for Spellcheck.h on Windows",
     long_description = get_long_description(),
     url="https://github.com/pyenchant/pywin32-cffi-spellcheck",
