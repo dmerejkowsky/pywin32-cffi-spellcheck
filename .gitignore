@@ -1,6 +1,6 @@
-build
 __pycache__
 build/
+dist/
 *.pyd
 *.egg-info/
 .eggs/
