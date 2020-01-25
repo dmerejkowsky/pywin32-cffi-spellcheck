@@ -29,6 +29,21 @@ class SpellChecker:
         else:
             raise Error("Could not check", word)
 
+    def add(self, word):
+        """ Add a word to the dictionary. This is permanent """
+        ok = lib.sc_add(self.checker, word)
+        if not ok:
+            raise Error("Could not add", word)
+
+    def remove(self, word):
+        """ Remove a world Removes a word that was previously added by
+        `self.add()`, or set by `self.ignore()` to be ignored.
+        """
+        ok = lib.sc_remove(self.checker, word)
+        if not ok != 0:
+            raise Error("Could not remove", word)
+
+
     def suggest(self, word):
         suggestions = lib.sc_suggest(self.checker, word)
         if suggestions == ffi.NULL:

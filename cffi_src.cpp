@@ -4,6 +4,7 @@
 
 #include <Spellcheck.h>
 
+// TODO: call Release!
 
 ISpellCheckerFactory* sc_create_factory() {
 	HRESULT hr;
@@ -12,7 +13,7 @@ ISpellCheckerFactory* sc_create_factory() {
 		std::cout << "Could not run CoInit, hr:" << hr << std::endl;
 		return nullptr;
 	}
-			
+
 	ISpellCheckerFactory *factory;
 
 	hr = CoCreateInstance (__uuidof(SpellCheckerFactory), nullptr,
@@ -41,32 +42,32 @@ ISpellCheckerFactory* sc_create_factory() {
 
 ISpellChecker* sc_create_checker(ISpellCheckerFactory* factory, const wchar_t* const wtag) {
 	ISpellChecker *checker;
-		
+
 	HRESULT hr;
 	hr = factory->CreateSpellChecker (wtag, &checker);
 		if (FAILED(hr)) {
 		return nullptr;
 	}
-	
+
 	return checker;
 }
 
-
+// TOOD: return HRESULT?
 int sc_check(ISpellChecker* checker, const wchar_t *const word)
 {
 	IEnumSpellingError *errors;
 	ISpellingError *error = nullptr;
 	HRESULT hr;
 
-	hr = checker->Check (word, &errors);
+	hr = checker->Check(word, &errors);
 
 	if (FAILED (hr))
 		return -1; /* Error */
 
-	if (errors->Next (&error) == S_OK)
+	if (errors->Next(&error) == S_OK)
 	{
-		error->Release ();
-		errors->Release ();
+		error->Release();
+		errors->Release();
 		return 1; /* Spelling Issue */
 	}
 	else
@@ -75,6 +76,41 @@ int sc_check(ISpellChecker* checker, const wchar_t *const word)
 		return 0; /* Correct */
 	}
 }
+
+bool sc_add(ISpellChecker* checker, const wchar_t *const word)
+{
+	std::wcout << "Adding: " << word << std::endl;
+	HRESULT hr = checker->Add(word);
+		if (hr != S_OK) {
+		std::cout << "Error when querying ISpellChecker2 interface, hr: " << hr << std::endl;
+		return false;
+	}
+	return true;
+}
+
+bool sc_remove(ISpellChecker* checker, const wchar_t *const word)
+{
+	std::wcout << "Removing: " << word << std::endl;
+
+	ISpellChecker2 *spellChecker2 = NULL;
+    HRESULT hr = checker->QueryInterface(__uuidof(ISpellChecker2), (LPVOID *)&spellChecker2);
+	if (hr != S_OK) {
+		std::cout << "Error when querying ISpellChecker2 interface, hr: " << hr << std::endl;
+		return false;
+	}
+
+	bool res;
+	 hr = spellChecker2->Remove(word);
+     if (hr != S_OK) {
+		std::cout << "Error when calling Remove(), hr: " << hr << std::endl;
+		res = false;
+	 } else {
+		 res = true;
+	 }
+	 spellChecker2->Release();
+	 return res;
+}
+
 
 wchar_t** sc_suggest(ISpellChecker* checker, const wchar_t *const word) {
 	IEnumString *suggestions;
@@ -88,7 +124,7 @@ wchar_t** sc_suggest(ISpellChecker* checker, const wchar_t *const word) {
 	}
 
 	wchar_t** res = (wchar_t**) malloc(256 * sizeof(wchar_t*));
-	
+
 	LPOLESTR wstr = nullptr;
 	size_t i = 0;
 

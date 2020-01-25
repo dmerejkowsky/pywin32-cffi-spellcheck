@@ -1,4 +1,10 @@
+import random
+import string
 from winspellcheck import SpellChecker, Error
+
+
+def random_string():
+    return "".join(random.choice(string.ascii_lowercase) for _ in range(20))
 
 
 def test_supports_en_us():
@@ -28,3 +34,20 @@ def test_suggest():
     n = len(suggestions)
     assert n >= 1
     assert "hello" in suggestions
+
+
+def test_add():
+    checker = SpellChecker("en-US")
+    bad_word = random_string()
+    assert not checker.check(bad_word)
+    checker.add(bad_word)
+    assert checker.check(bad_word)
+
+
+def test_remove():
+    checker = SpellChecker("en-US")
+    bad_word = random_string()
+    checker.add(bad_word)
+    assert checker.check(bad_word)
+    checker.remove(bad_word)
+    assert not checker.check(bad_word)
